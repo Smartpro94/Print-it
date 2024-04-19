@@ -17,19 +17,59 @@ const slides = [
     tagLine: 'Autocollants <span>avec découpe laser sur mesure</span>',
   },
 ];
+const dots = document.querySelector('.dots');
 let listFleche = document.querySelectorAll('.arrow');
+let index = 0;
 
-for (i = 0; i < listFleche.length; i++) {
-  let flecheActuel = listFleche[i];
-  console.log(flecheActuel);
+const displayDots = () => {
+  dots.innerHTML = '';
+  for (let i = 0; i < slides.length; i++) {
+    let dot = document.createElement('div');
+    dot.classList.add('dot');
+    dots.appendChild(dot);
 
-  flecheActuel.addEventListener('click', (event) => {
-    let fleche = event.target;
-    if (fleche.classList.contains('arrow_left')) {
-      console.log('boutton left');
-    } else if (fleche.classList.contains('arrow_right')) {
-      console.log('boutton right');
+    if (i == index) {
+      dot.classList.add('dot_selected');
     }
-  });
-}
-console.log("Aujourd'hui");
+  }
+};
+
+displayDots();
+
+const tabDots = document.querySelectorAll('.dots .dot');
+const img = document.querySelector('.banner-img');
+const p = document.querySelector('#banner p');
+
+const handleRightClick = () => {
+  if (tabDots.length > 0) {
+    tabDots[index].classList.remove('dot_selected'); // Retire la class du premier bouton
+    index++;
+    if (index >= slides.length) {
+      index = 0; // click a l'extreme droite, il revient a 0
+    }
+    tabDots[index].classList.add('dot_selected');
+    img.src = './assets/images/slideshow/' + slides[index].image;
+    p.innerHTML = slides[index].tagLine;
+  }
+};
+
+const arrowRight = document.querySelector(".arrow_right")
+
+
+arrowRight.addEventListener("click", handleRightClick)
+
+const handleLeftClick = () => {
+  if (tabDots.length > 0) {
+    tabDots[index].classList.remove('dot_selected'); // Retire la class du premier bouton
+    index--;
+    if (index < 0) {
+      index = slides.length-1; // click a l'extreme gauche, il va a 4
+    }
+    tabDots[index].classList.add('dot_selected');
+    img.src = './assets/images/slideshow/' + slides[index].image;
+    p.innerHTML = slides[index].tagLine;
+  }
+};
+const arrowLeft = document.querySelector(".arrow_left")
+arrowLeft.addEventListener("click", handleLeftClick)
+
